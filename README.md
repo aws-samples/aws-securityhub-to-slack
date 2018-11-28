@@ -1,7 +1,7 @@
-## AWS Securityhub To Slack
+# aws-securityhub-to-slack
+Demonstrates sending AWS Security Hub findings to your Slack WorkSpace 
 
-Demonstrates sending AWS findings to your Slack Channel
+## Coming Soon!
+This post will introduce you to the process of creating AWS Security Hub a custom action by sending findings to Slack.  After reading this blog you will understand the process to create your own custom actions for utilization in your Security Operations play books.
 
-## License Summary
-
-This sample code is made available under a modified MIT license. See the LICENSE file.
+## Stay tuned for CloudFormation Templates
