@@ -31,8 +31,8 @@ This repo will introduce you to the process of creating AWS Security Hub a custo
 This CloudFormation template will create a Lambda Function that utilizes Slack’s Webhook API feature, as well as a CloudWatch Event Rule to send findings from Security Hub’s custom actions to Slack.
     + Download CloudFormation template by right clicking on “SecurityHubFindingsToSlack.json” and “Save Link As..” on your local machine
     + Navigate to https://console.aws.amazon.com/cloudformation/
-    + Select *Create stack*
-    + Select Upload a template file
+    + Select **Create stack**
+    + Select **Upload a template file**
     + Select Choose file and locate “SecurityHubFindingsToSlack.json” on your local machine
     + Select Next
     + Use the following values to fill out *Create Stack* parameters  
