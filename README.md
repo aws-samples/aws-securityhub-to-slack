@@ -6,15 +6,16 @@ This repo will introduce you to the process of creating AWS Security Hub a custo
 
 ## Send to Slack Custom Action
 
-1.	Prerequisites
+1.	**Prerequisites**
     + AWS Security Hub is enabled from previous example.
-    +	Membership in a Slack workspace (https://get.slack.help/hc/en-us/articles/212675257-Join-a-Slack-workspace)
-2.  Create an incoming Webhook in Slack API
+    + Membership in a Slack workspace (https://get.slack.help/hc/en-us/articles/212675257-Join-a-Slack-workspace)
+2.  **Create an incoming Webhook in Slack API**
     + Go to your Slack API web page to create the Webhook (https://api.slack.com/incoming-webhooks#create_a_webhook)
     + Click on Create Your Slack App button
-    + Click on Create New App button
-      •	App Name: SecurityHubToSlack”
-      •	Development Slack Workspace : “Choose the Slack workspace that will receive the Security Hub Findings” (SecurityHubTesting is only an example)
+    + Click on Create New App button . 
+    
+     **App Name**: SecurityHubToSlack”
+     **Development Slack Workspace** : “Choose the Slack workspace that will receive the Security Hub Findings”          (SecurityHubTesting is only an example)
  
 d.	Click on the Create App Button
 e.	Select “Incoming Webhooks” 
