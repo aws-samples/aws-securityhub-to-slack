@@ -14,8 +14,8 @@ This repo will introduce you to the process of creating AWS Security Hub a custo
     + Click on Create Your Slack App button
     + Click on Create New App button . 
     
-     **App Name**: "SecurityHubToSlack"
-     **Development Slack Workspace** : "Choose the Slack workspace that will receive the Security Hub Findings"          
+    **App Name**: "SecurityHubToSlack"
+    **Development Slack Workspace** : "Choose the Slack workspace that will receive the Security Hub Findings"          
  
     + Click on the Create App Button
     + Select “Incoming Webhooks” 
