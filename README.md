@@ -12,22 +12,18 @@ This repo will introduce you to the process of creating AWS Security Hub a custo
 2.  **Create an incoming Webhook in Slack API**
     + Go to your Slack API web page to create the Webhook (https://api.slack.com/incoming-webhooks#create_a_webhook)
     + Click on Create Your Slack App button
-    + Click on Create New App button . 
+    + Click on Create New App button  
     
      **App Name**: SecurityHubToSlack”
-     **Development Slack Workspace** : “Choose the Slack workspace that will receive the Security Hub Findings”          (SecurityHubTesting is only an example)
+     **Development Slack Workspace** : “Choose the Slack workspace that will receive the Security Hub Findings”          
  
-d.	Click on the Create App Button
-e.	Select “Incoming Webhooks” 
-
-
-f.	At the “Activate Incoming Webhooks” Screen
-i)	Move the slider from OFF   to ON  
-g.	Scroll down and Add New Webhook to Workspace
- 
-h.	Select the Slack Channel in your Slack Workspace that the Security Hub findings will be posted to and select Authorize (suggestion “#alerts”)
- 
-i.	On the next screen, scroll down to the Webhook URL section and click the “Copy” button, so we can use it as input in our CloudFormation template
+    + Click on the Create App Button
+    + Select “Incoming Webhooks” 
+    + At the “Activate Incoming Webhooks” Screen
+    + Move the slider from OFF   to ON  
+    + Scroll down and Add New Webhook to Workspace
+    + Select the Slack Channel in your Slack Workspace that the Security Hub findings will be posted to and select Authorize (suggestion “#alerts”)
+    + On the next screen, scroll down to the Webhook URL section and click the “Copy” button, so we can use it as input in our CloudFormation template
  
 3.	Launch Cloud Formation Template
 This CloudFormation template will create a Lambda Function that utilizes Slack’s Webhook API feature, as well as a CloudWatch Event Rule to send findings from Security Hub’s custom actions to Slack.
