@@ -36,7 +36,7 @@ This CloudFormation template will create a Lambda Function that utilizes Slack�
     + Select Choose file and locate “SecurityHubFindingsToSlack.json” on your local machine
     + Select Next
     
-   **Parameters with values to fill out in Create Stack**  
+   **Parameters with values to fill out in Create Stack**   
         **StackName**: EnableSecurityHubFindingsToSlack  
         **IncomingWebHookURL**: Paste what you just copied from Slack API pages  
         **SlackChannel**: Enter the same Slack Channel name that you chose above (#alerts)  
