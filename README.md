@@ -35,25 +35,26 @@ This CloudFormation template will create a Lambda Function that utilizes Slack�
     + Select Next
     
    **Parameters with values to fill out in Create Stack**
-    **StackName**: EnableSecurityHubFindingsToSlack
-    **IncomingWebHookURL**: Paste what you just copied from Slack API pages
-    **SlackChannel**: Enter the same Slack Channel name that you chose above (#alerts)
-    **MinSeverityLevel**: Choose the minimum Severity Level you want to be notified in Slack, example HIGH would only send high severity findings, LOW sends all findings . 
+        **StackName**: EnableSecurityHubFindingsToSlack
+        **IncomingWebHookURL**: Paste what you just copied from Slack API pages
+        **SlackChannel**: Enter the same Slack Channel name that you chose above (#alerts)
+        **MinSeverityLevel**: Choose the minimum Severity Level you want to be notified in Slack, example HIGH would only send high severity findings, LOW sends all findings .  
 
-    + Complete Create Stack form
-    + Select Next, fill out any Tags and select Next again
-    + Accept IAM Resource creation
-    + Select Create Stack, CloudFormation will then begin creating the stack
-    + Wait for the CloudFormation console to report stack creation complete
+   + Complete Create Stack form
+   + Select Next, fill out any Tags and select Next again
+   + Accept IAM Resource creation
+   + Select Create Stack, CloudFormation will then begin creating the stack
+   + Wait for the CloudFormation console to report stack creation complete
 
  
 
-4.	Create Security Hub Custom Actions
-a.	In the Security Hub navigation pane (https://console.aws.amazon.com/securityhub/) select Settings then choose the Custom Actions tab. Select Create custom action. Then in the Create custom action pop up, specify the action name, description and ID then choose OK to create the action.
- 
-•	Name: Send to Slack
-•	Description: This custom action sends selected findings as channel in a Slack Workspace 
-•	Custom action ID: SendToSlack
+4.	**Create Security Hub Custom Actions** . 
+    + In the Security Hub navigation pane (https://console.aws.amazon.com/securityhub/) select Settings then choose the **Custom Actions** tab. Select **Create custom action**. Then in the Create custom action pop up, specify the action name, description and ID then choose OK to create the action.
+    
+   **Parameters with values to fill out in Create Custom Action
+    **Name**: Send to Slack
+    **Description**: This custom action sends selected findings as channel in a Slack Workspace 
+    **Custom action ID**: SendToSlack
 
 
 5.	Navigate to “Testing Custom Actions in AWS Security Hub” at the end of this post.
