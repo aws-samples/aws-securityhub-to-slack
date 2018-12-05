@@ -53,11 +53,11 @@ This CloudFormation template will create a Lambda Function that utilizes Slackâ€
     + Select **Create custom action**. 
     + Then in the Create custom action pop up, specify the action name, description and ID then choose OK to create the action.
     
-   **Use these values to fill Create Custom Action parameters . 
+    **Use these values to fill Create Custom Action parameters  
    
-    **Name**: Send to Slack
-    **Description**: This custom action sends selected findings as channel in a Slack Workspace 
-    **Custom action ID**: SendToSlack
+      **Name**: Send to Slack  
+      **Description**: This custom action sends selected findings as channel in a Slack Workspace 
+      **Custom action ID**: SendToSlack  
 
 
 5.	**Testing the Send to Slack Custom Action**
