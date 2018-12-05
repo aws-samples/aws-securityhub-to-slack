@@ -2,6 +2,8 @@
 Demonstrates sending AWS Security Hub findings to your Slack WorkSpace 
 
 ## Coming Soon!
+This is the companion GitHub repository for the AWS blog post ... x.x.x.x.x.x.x.x.x.x.x
+
 This repo will introduce you to the process of creating AWS Security Hub a custom action by sending findings to Slack.  After reading this blog you will understand the process to create your own custom actions for utilization in your Security Operations play books.
 
 ## Send to Slack Custom Action
@@ -34,11 +36,11 @@ This CloudFormation template will create a Lambda Function that utilizes Slack�
     + Select Choose file and locate “SecurityHubFindingsToSlack.json” on your local machine
     + Select Next
     
-   **Parameters with values to fill out in Create Stack** . 
-        **StackName**: EnableSecurityHubFindingsToSlack . 
-        **IncomingWebHookURL**: Paste what you just copied from Slack API pages . 
-        **SlackChannel**: Enter the same Slack Channel name that you chose above (#alerts) . 
-        **MinSeverityLevel**: Choose the minimum Severity Level you want to be notified in Slack, example HIGH would only send high severity findings, LOW sends all findings .  
+   **Parameters with values to fill out in Create Stack**  
+        **StackName**: EnableSecurityHubFindingsToSlack  
+        **IncomingWebHookURL**: Paste what you just copied from Slack API pages  
+        **SlackChannel**: Enter the same Slack Channel name that you chose above (#alerts)  
+        **MinSeverityLevel**: Choose the minimum Severity Level you want to be notified in Slack, example HIGH would only send high severity findings, LOW sends all findings   
 
    + Complete Create Stack form
    + Select Next, fill out any Tags and select Next again
