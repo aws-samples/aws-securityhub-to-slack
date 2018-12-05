@@ -40,13 +40,12 @@ This CloudFormation template will create a Lambda Function that utilizes Slackâ€
       **StackName**: EnableSecurityHubFindingsToSlack  
       **IncomingWebHookURL**: Paste URL that you just copied from Slack API pages  
       **SlackChannel**: Enter the same Slack Channel name that you chose above (#alerts)  
-      **MinSeverityLevel**: Choose the minimum Severity Level you want to be notified in Slack, example HIGH would only send high severity findings, LOW sends all findings   
+      **MinSeverityLevel**: Choose the minimum Severity Level you want to be notified in Slack, example HIGH would only send high severity findings, LOW sends all findings  
 
-   + Complete Create Stack form
-   + Select Next, fill out any Tags and select Next again
-   + Accept IAM Resource creation
-   + Select Create Stack, CloudFormation will then begin creating the stack
-   + Wait for the CloudFormation console to report stack creation complete
+     + Select Next, fill out any Tags and select Next again
+     + Accept IAM Resource creation
+     + Select Create Stack, CloudFormation will then begin creating the stack
+     + Wait for the CloudFormation console to report stack creation complete
 
 4.	**Create Security Hub Custom Actions** . 
     + In the Security Hub navigation pane (https://console.aws.amazon.com/securityhub/) select Settings then choose the **Custom Actions** tab. 
