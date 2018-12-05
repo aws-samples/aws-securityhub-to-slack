@@ -17,13 +17,13 @@ This repo will introduce you to the process of creating AWS Security Hub a custo
     **App Name**: "SecurityHubToSlack"  
     **Development Slack Workspace** : "Choose the Slack workspace that will receive the Security Hub Findings"          
  
-    + Click on the Create App Button
-    + Select “Incoming Webhooks” 
+    + Click on the **Create App** Button
+    + Select **Incoming Webhooks** 
     + At the “Activate Incoming Webhooks” Screen
     + Move the slider from OFF   to ON  
-    + Scroll down and Add New Webhook to Workspace
+    + Scroll down and **Add New Webhook to Workspace**
     + Select the Slack Channel in your Slack Workspace that the Security Hub findings will be posted to and select Authorize (suggestion “#alerts”)
-    + On the next screen, scroll down to the Webhook URL section and click the “Copy” button, so we can use it as input in our CloudFormation template
+    + On the next screen, scroll down to the Webhook URL section and click the **Copy** button, so we can use it as input in our CloudFormation template
  
 3.	**Launch Cloud Formation Template** . 
 This CloudFormation template will create a Lambda Function that utilizes Slack’s Webhook API feature, as well as a CloudWatch Event Rule to send findings from Security Hub’s custom actions to Slack.
@@ -33,26 +33,18 @@ This CloudFormation template will create a Lambda Function that utilizes Slack�
     + Select Upload a template file
     + Select Choose file and locate “SecurityHubFindingsToSlack.json” on your local machine
     + Select Next
+    
+   **Parameters with values to fill out in Create Stack**
+    **StackName**: EnableSecurityHubFindingsToSlack
+    **IncomingWebHookURL**: Paste what you just copied from Slack API pages
+    **SlackChannel**: Enter the same Slack Channel name that you chose above (#alerts)
+    **MinSeverityLevel**: Choose the minimum Severity Level you want to be notified in Slack, example HIGH would only send high severity findings, LOW sends all findings . 
 
- 
-
-
- 
-Parameters with values to fill out in Create Stack
-•	StackName: EnableSecurityHubFindingsToSlack
-•	IncomingWebHookURL: Paste what you just copied from Slack API pages
-•	SlackChannel: Enter the same Slack Channel name that you chose above (#alerts)
-•	MinSeverityLevel: Choose the minimum Severity Level you want to be notified in Slack, example HIGH would only send high severity findings, LOW sends all findings
-g.	Complete Create Stack form
-h.	Select Next, fill out any Tags and select Next again
-i.	Accept IAM Resource creation
- 
-
-j.	Select Create Stack, CloudFormation will then begin creating the stack
-
- 
-
-k.	Wait for the CloudFormation console to report stack creation complete
+    + Complete Create Stack form
+    + Select Next, fill out any Tags and select Next again
+    + Accept IAM Resource creation
+    + Select Create Stack, CloudFormation will then begin creating the stack
+    + Wait for the CloudFormation console to report stack creation complete
 
  
 
