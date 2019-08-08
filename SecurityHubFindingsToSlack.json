@@ -23,7 +23,7 @@
                     "default" : "Slack channel to send findings to"
                 },
                 "MinSeverityLevel" : {
-                    "default"  : "Minimum severity level (LOW, MED, HIGH)"
+                    "default"  : "Minimum severity level (Informational, Low, Medium, High, Critical)"
                 }
             }
         }
@@ -41,12 +41,14 @@
         },
         "MinSeverityLevel": {
             "Default": "LOW",
-            "Description": "The minimum findings severity to send to your slack channel (LOW, MEDIUM or HIGH)",
+            "Description": "The minimum findings severity to send to your slack channel (Informational, Low, Medium, High, Critical)",
             "Type": "String",
         "AllowedValues": [
-                "LOW",
-                "MEDIUM",
-                "HIGH"
+                "Informational",
+                "Low",
+                "medium",
+                "High",
+                "Critical"
             ]
         }
     },
@@ -165,14 +167,29 @@
                             "var color = '#7CD197';\n",
                             "var severity = '';\n",
                             "\n",
-                            "if (message.detail.findings[0].Severity.Product < 4.0) {\n",
-                            "if (minSeverityLevel !== 'LOW') {\n",
+                            "if (message.detail.findings[0].Severity.Normalized = 0) {\n",
+                            "if (minSeverityLevel !== 'Informational') {\n",
+                            "callback(null);\n",
+                            "return;\n",
+                            "}\n",
+                            "if (1 <= message.detail.findings[0].Severity.Normalized  <= 39) {\n",
+                            "if (minSeverityLevel !== 'Low') {\n",
+                            "callback(null);\n",
+                            "return;\n",
+                            "}\n",
+                            "if (40 <= message.detail.findings[0].Severity.Normalized  <= 69) {\n",
+                            "if (minSeverityLevel !== 'Medium') {\n",
+                            "callback(null);\n",
+                            "return;\n",
+                            "}\n",
+                            "if (70 <= message.detail.findings[0].Severity.Normalized  <= 89) {\n",
+                            "if (minSeverityLevel !== 'High') {\n",
                             "callback(null);\n",
                             "return;\n",
                             "}\n",
                             "severity = 'Low';\n",
-                            "} else if (message.detail.findings[0].Severity.Product < 7.0) {\n",
-                            "if (minSeverityLevel === 'HIGH') {\n",
+                            "} else if (90 <= message.detail.findings[0].Severity.Normalized  <= 100) {\n",
+                            "if (minSeverityLevel === 'Critical') {\n",
                             "callback(null);\n",
                             "return;\n",
                             "}\n",
@@ -242,4 +259,3 @@
     }
     }
 }
-
