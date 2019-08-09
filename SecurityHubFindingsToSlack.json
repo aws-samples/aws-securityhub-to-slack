@@ -10,8 +10,7 @@
                     },
                     "Parameters": [
                         "IncomingWebHookURL",
-                        "SlackChannel",
-                        "MinSeverityLevel"
+                        "SlackChannel"
                     ]
                 }
             ],
@@ -21,9 +20,6 @@
                 },
                 "SlackChannel" : {
                     "default" : "Slack channel to send findings to"
-                },
-                "MinSeverityLevel" : {
-                    "default"  : "Minimum severity level (Informational, Low, Medium, High, Critical)"
                 }
             }
         }
@@ -38,18 +34,6 @@
             "Default": "#alerts",
             "Description": "The slack channel to send findings to",
             "Type": "String"
-        },
-        "MinSeverityLevel": {
-            "Default": "Low",
-            "Description": "The minimum findings severity to send to your slack channel (Informational, Low, Medium, High, Critical)",
-            "Type": "String",
-        "AllowedValues": [
-                "Informational",
-                "Low",
-                "medium",
-                "High",
-                "Critical"
-            ]
         }
     },
     "Resources": {
@@ -122,7 +106,6 @@
                             "\n",
                             "const webHookUrl = process.env['webHookUrl'];\n",
                             "const slackChannel = process.env.slackChannel;\n",
-                            "const minSeverityLevel = process.env['minSeverityLevel'];\n",
                             "\n",
                             "function postMessage(message, callback) {\n",
                             "const body = JSON.stringify(message);\n",
@@ -219,8 +202,7 @@
             "Environment" : {
             "Variables" : {
             "slackChannel" : { "Ref" : "SlackChannel" },
-            "webHookUrl" : { "Ref": "IncomingWebHookURL" },
-            "minSeverityLevel" : {"Ref" : "MinSeverityLevel"}
+            "webHookUrl" : { "Ref": "IncomingWebHookURL" }
             }
         },
         "Runtime": "nodejs8.10",
