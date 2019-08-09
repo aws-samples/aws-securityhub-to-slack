@@ -10,8 +10,7 @@
                     },
                     "Parameters": [
                         "IncomingWebHookURL",
-                        "SlackChannel",
-                        "MinSeverityLevel"
+                        "SlackChannel"
                     ]
                 }
             ],
@@ -21,9 +20,6 @@
                 },
                 "SlackChannel" : {
                     "default" : "Slack channel to send findings to"
-                },
-                "MinSeverityLevel" : {
-                    "default"  : "Minimum severity level (LOW, MED, HIGH)"
                 }
             }
         }
@@ -38,16 +34,6 @@
             "Default": "#alerts",
             "Description": "The slack channel to send findings to",
             "Type": "String"
-        },
-        "MinSeverityLevel": {
-            "Default": "LOW",
-            "Description": "The minimum findings severity to send to your slack channel (LOW, MEDIUM or HIGH)",
-            "Type": "String",
-        "AllowedValues": [
-                "LOW",
-                "MEDIUM",
-                "HIGH"
-            ]
         }
     },
     "Resources": {
@@ -120,7 +106,6 @@
                             "\n",
                             "const webHookUrl = process.env['webHookUrl'];\n",
                             "const slackChannel = process.env.slackChannel;\n",
-                            "const minSeverityLevel = process.env['minSeverityLevel'];\n",
                             "\n",
                             "function postMessage(message, callback) {\n",
                             "const body = JSON.stringify(message);\n",
@@ -160,28 +145,17 @@
                             "const findingTimeEpoch = Math.floor(new Date(findingTime) / 1000);\n",
                             "const account =  message.detail.findings[0].AwsAccountId;\n",
                             "const region =  message.detail.findings[0].Resources[0].Region;\n",
+                            "const type = message.detail.findings[0].Resources[0].Type;\n",
                             "const messageId = message.detail.findings[0].Resources[0].Id;\n",
                             "const lastSeen = `<!date^${findingTimeEpoch}^{date} at {time} | ${findingTime}>`;\n",
                             "var color = '#7CD197';\n",
                             "var severity = '';\n",
                             "\n",
-                            "if (message.detail.findings[0].Severity.Product < 4.0) {\n",
-                            "if (minSeverityLevel !== 'LOW') {\n",
-                            "callback(null);\n",
-                            "return;\n",
-                            "}\n",
-                            "severity = 'Low';\n",
-                            "} else if (message.detail.findings[0].Severity.Product < 7.0) {\n",
-                            "if (minSeverityLevel === 'HIGH') {\n",
-                            "callback(null);\n",
-                            "return;\n",
-                            "}\n",
-                            "severity = 'Medium';\n",
-                            "color = '#e2d43b';\n",
-                            "} else {\n",
-                            "severity = 'High';\n",
-                            "color = '#ad0614';\n",
-                            "}\n",
+                            "if (1 <= message.detail.findings[0].Severity.Normalized && message.detail.findings[0].Severity.Normalized <= 39) {severity = 'LOW'; color ='#879596';}\n",
+                            "else if (40 <= message.detail.findings[0].Severity.Normalized && message.detail.findings[0].Severity.Normalized <= 69) {severity = 'MEDIUM'; color = '#ed7211';}\n",
+                            "else if (70 <= message.detail.findings[0].Severity.Normalized && message.detail.findings[0].Severity.Normalized <= 89) {severity = 'HIGH'; color = '#ed7211';}\n",
+                            "else if (90 <= message.detail.findings[0].Severity.Normalized && message.detail.findings[0].Severity.Normalized <= 100) {severity = 'CRITICAL'; color = '#ff0209';}\n",
+                            "else {severity = 'INFORMATIONAL'; color = '#007cbc';}\n",
                             "\n",
                             "const attachment = [{\n",
                             "\"fallback\": finding + ` - ${consoleUrl}/home?region=` + `${region}#/findings?search=id%3D${messageId}`,\n",
@@ -193,6 +167,7 @@
                             "\"fields\": [\n",
                             "{\"title\": \"Severity\",\"value\": `${severity}`, \"short\": true},\n",
                             "{\"title\": \"Region\",\"value\": `${region}`,\"short\": true},\n",
+                            "{\"title\": \"Resource Type\",\"value\": `${type}`,\"short\": true},\n",
                             "{\"title\": \"Last Seen\",\"value\": `${lastSeen}`, \"short\": true}\n",
                             "],\n",
                             "\"mrkdwn_in\": [\"pretext\"],\n",
@@ -227,8 +202,7 @@
             "Environment" : {
             "Variables" : {
             "slackChannel" : { "Ref" : "SlackChannel" },
-            "webHookUrl" : { "Ref": "IncomingWebHookURL" },
-            "minSeverityLevel" : {"Ref" : "MinSeverityLevel"}
+            "webHookUrl" : { "Ref": "IncomingWebHookURL" }
             }
         },
         "Runtime": "nodejs8.10",
@@ -242,4 +216,3 @@
     }
     }
 }
-
