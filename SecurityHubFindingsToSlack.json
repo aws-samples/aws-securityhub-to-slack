@@ -141,7 +141,7 @@
                             "const consoleUrl = `https://console.aws.amazon.com/securityhub`;\n",
                             "const finding = message.detail.findings[0].Types[0];\n",
                             "const findingDescription = message.detail.findings[0].Description;\n",
-                            "const findingTime = message.detail.findings[0].updatedAt;\n",
+                            "const findingTime = message.detail.findings[0].UpdatedAt;\n",
                             "const findingTimeEpoch = Math.floor(new Date(findingTime) / 1000);\n",
                             "const account =  message.detail.findings[0].AwsAccountId;\n",
                             "const region =  message.detail.findings[0].Resources[0].Region;\n",
