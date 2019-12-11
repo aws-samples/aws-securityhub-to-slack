@@ -1,0 +1,15 @@
+{
+  "source": [
+    "aws.securityhub"
+  ],
+  "detail": {
+    "findings": {
+      "ProductFields": {
+        "aws/securityhub/SeverityLabel": [
+          "HIGH",
+          "CRITICAL"
+        ]
+      }
+    }
+  }
+}
