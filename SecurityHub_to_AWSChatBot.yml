@@ -1,0 +1,168 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Deploys CustomAction in SecurityHub to enable sending findings to Slack via AWS Chatbot
+ 
+#==================================================
+# Parameters
+#==================================================
+Parameters:
+  SlackWorkSpaceID:
+    Description: Slack workspace ID (Copy and Paste from AWS Chatbot Configured Clients Interface)
+    Type: String
+    MinLength: 9
+    MaxLength: 15
+    AllowedPattern: ^[a-zA-Z0-9_]*$
+    ConstraintDescription: |
+      Malformed Input Parameter: Environment must contain only upper and numbers. Length should be minimum of 9 characters and a maximum of 15 characters.
+ 
+  SlackChannelID:
+    Description: Slack Channel ID
+    Type: String
+    MinLength: 9
+    MaxLength: 15
+    AllowedPattern: ^[a-zA-Z0-9_]*$
+    ConstraintDescription: |
+      Malformed Input Parameter: Environment must contain only upper and numbers. Length should be a minimum of 9 characters and a maximum of 15 characters.
+      
+ 
+  # CustomActionName:
+  #   Description: Name of the Custom Action in SecurityHub
+  #   Type: String
+  #   AllowedPattern: ^[a-zA-Z0-9_]*$ 
+  #   Default: Send_To_Slack
+  #   #Default: 'Send To !Sub "${ChatApplication}"'
+ 
+ 
+#==================================================
+# Resources
+#==================================================
+Resources: 
+  #======================================================
+  # Lambda Role to create Custom Action
+  #======================================================
+  LambdaIAMRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+            - sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service:
+              - lambda.amazonaws.com
+        Version: 2012-10-17
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSLambdaExecute
+      Path: /
+  #======================================================
+  # Lambda Policy to create Custom Action
+  #======================================================
+  LambdaIAMPolicy:
+    Type: AWS::IAM::Policy
+    DependsOn: LambdaIAMRole
+    Properties:
+      PolicyName: LambdaCreateCustomActionPolicy
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - 'securityhub:CreateActionTarget'
+            Resource: '*'
+      Roles: 
+        - !Ref LambdaIAMRole
+  #======================================================
+  # Lambda Function to create Custom Action
+  #======================================================              
+  LambdaCreateCustomAction:
+    Type: AWS::Lambda::Function
+    DependsOn: LambdaIAMPolicy
+    Properties:
+      FunctionName: addcustomactionsecurityhub
+      Description: CreateCustom Action in SecurityHub
+      Runtime: python3.7
+      Handler: index.lambda_handler
+      Code:
+        ZipFile: |
+          import boto3
+          import cfnresponse
+          def lambda_handler(event, context):
+            securityhub = boto3.client('securityhub')
+            response = securityhub.create_action_target(Name="Send_To_Slack",Description='Send Messages to ChatApplication via AWS ChatBot',Id='SendToSlack')
+            responseData = {}
+            responseData['Data'] = response
+            cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData, "CustomResourcePhysicalID") 
+      MemorySize: 128
+      Timeout: 10
+      Role: !GetAtt LambdaIAMRole.Arn  
+  #======================================================
+  # Custom Resource to Invoke the Lambda Function
+  #======================================================     
+  AddCustomActionSHResource1:
+    Type: Custom::AddCustomActionSH
+    DependsOn: LambdaCreateCustomAction
+    Properties:
+      ServiceToken: !GetAtt LambdaCreateCustomAction.Arn
+  #======================================================
+  # SNS Topic
+  #======================================================         
+  SNSTopicAWSChatBot:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: AWS Chatbot SNS Topic
+  EventTopicPolicy:
+      Type: AWS::SNS::TopicPolicy
+      Properties:
+        PolicyDocument:
+          Id: topicPolicyCustomaction
+          Statement:
+          - Effect: Allow
+            Principal:
+              Service: events.amazonaws.com
+            Action: 'sns:Publish'
+            Resource: '*'
+        Topics:
+          - !Ref SNSTopicAWSChatBot
+  #======================================================
+  # CloudWatch Event Rule
+  #======================================================        
+  EventRuleCustomAction: 
+    Type: AWS::Events::Rule
+    Properties: 
+      Description: "SecurityHub Chatbot CustomAction"
+      EventPattern:
+        source: 
+          -  "aws.securityhub"
+        detail-type: 
+          - "Security Hub Findings - Custom Action"
+        resources:
+          - !Sub 'arn:aws:securityhub:${AWS::Region}:${AWS::AccountId}:action/custom/SendToSlack'
+      State: "ENABLED"
+      Targets: 
+        - 
+          Arn: 
+            Ref: "SNSTopicAWSChatBot"
+          Id: "OpsTopic"
+  ChatBotManageIAMRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument: 
+        Version: "2012-10-17"
+        Statement: 
+          - 
+            Effect: "Allow"
+            Principal: 
+              Service: 
+                - "sns.amazonaws.com"
+            Action: 
+              - "sts:AssumeRole"
+  SlackChannelConfig:
+    Type: AWS::Chatbot::SlackChannelConfiguration
+    Properties: 
+      ConfigurationName: securityhubnotification
+      IamRoleArn: !GetAtt ChatBotManageIAMRole.Arn
+      LoggingLevel: NONE
+      SlackChannelId: !Ref SlackChannelID
+      SlackWorkspaceId: !Ref SlackWorkSpaceID
+      SnsTopicArns: 
+        - !Ref  SNSTopicAWSChatBot                          
