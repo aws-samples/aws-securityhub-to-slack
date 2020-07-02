@@ -22,16 +22,23 @@ Parameters:
     AllowedPattern: ^[a-zA-Z0-9_]*$
     ConstraintDescription: |
       Malformed Input Parameter: Environment must contain only upper and numbers. Length should be a minimum of 9 characters and a maximum of 15 characters.
-      
- 
+
   # CustomActionName:
   #   Description: Name of the Custom Action in SecurityHub
   #   Type: String
   #   AllowedPattern: ^[a-zA-Z0-9_]*$ 
   #   Default: Send_To_Slack
   #   #Default: 'Send To !Sub "${ChatApplication}"'
- 
- 
+
+  configureSlackChannel:
+    Type: String
+    AllowedValues: [ true, false ]
+    Default: true
+
+Conditions:
+    configureSlackChannelConfig: !Equals [ !Ref configureSlackChannel, true ]
+    noConfigureSlackChannelConfig: !Equals [ !Ref configureSlackChannel, false ]
+
 #==================================================
 # Resources
 #==================================================
@@ -123,6 +130,13 @@ Resources:
             Resource: '*'
         Topics:
           - !Ref SNSTopicAWSChatBot
+  AWSChatBotSubscription:
+    Type: AWS::SNS::Subscription
+    Condition: noConfigureSlackChannelConfig
+    Properties: 
+      Endpoint: https://global.sns-api.chatbot.amazonaws.com
+      Protocol: HTTPS
+      TopicArn: !Ref SNSTopicAWSChatBot
   #======================================================
   # CloudWatch Event Rule
   #======================================================        
@@ -158,6 +172,7 @@ Resources:
               - "sts:AssumeRole"
   SlackChannelConfig:
     Type: AWS::Chatbot::SlackChannelConfiguration
+    Condition: configureSlackChannelConfig
     Properties: 
       ConfigurationName: securityhubnotification
       IamRoleArn: !GetAtt ChatBotManageIAMRole.Arn
@@ -165,4 +180,4 @@ Resources:
       SlackChannelId: !Ref SlackChannelID
       SlackWorkspaceId: !Ref SlackWorkSpaceID
       SnsTopicArns: 
-        - !Ref  SNSTopicAWSChatBot                          
+        - !Ref  SNSTopicAWSChatBot
