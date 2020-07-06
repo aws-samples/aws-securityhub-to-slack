@@ -68,6 +68,7 @@ Resources:
           - Effect: Allow
             Action:
               - 'securityhub:CreateActionTarget'
+              - 'securityhub:DeleteActionTarget'
             Resource: '*'
       Roles: 
         - !Ref LambdaIAMRole
@@ -85,13 +86,37 @@ Resources:
       Code:
         ZipFile: |
           import boto3
+          import os
           import cfnresponse
           def lambda_handler(event, context):
             securityhub = boto3.client('securityhub')
-            response = securityhub.create_action_target(Name="Send_To_Slack",Description='Send Messages to ChatApplication via AWS ChatBot',Id='SendToSlack')
             responseData = {}
-            responseData['Data'] = response
-            cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData, "CustomResourcePhysicalID") 
+            responseStatus = cfnresponse.SUCCESS
+            if event['RequestType'] == 'Create':
+              try:
+                responseData['Data'] = securityhub.create_action_target(Name="Send_To_Slack",Description='Send Messages to ChatApplication via AWS ChatBot',Id='SendToSlack')
+              except Exception as e:
+                responseData['Data'] = str(e)
+                responseStatus = cfnresponse.FAILED
+
+            if event['RequestType'] == 'Delete':
+              try:
+                arnDeleteTo = ''.join( [
+                  'arn:aws:securityhub:',
+                  os.environ.get('AWS_REGION'),
+                  ':',
+                  boto3.client('sts').get_caller_identity().get('Account'),
+                  ':action/custom/SendToSlack'
+                ] )
+                responseData['Data'] = securityhub.delete_action_target(ActionTargetArn=arnDeleteTo)
+              except securityhub.exceptions.ResourceNotFoundException as rnfe:
+                responseData['Data'] = str(rnfe)
+              except Exception as e:
+                responseData['Data'] = str(e)
+                responseStatus = cfnresponse.FAILED
+
+            cfnresponse.send(event, context, responseStatus, responseData, "CustomResourcePhysicalID")
+
       MemorySize: 128
       Timeout: 10
       Role: !GetAtt LambdaIAMRole.Arn  
