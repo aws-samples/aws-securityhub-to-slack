@@ -91,13 +91,13 @@ Resources:
           def lambda_handler(event, context):
             securityhub = boto3.client('securityhub')
             responseData = {}
-            responceStatus = cfnresponse.SUCCESS
+            responseStatus = cfnresponse.SUCCESS
             if event['RequestType'] == 'Create':
               try:
                 responseData['Data'] = securityhub.create_action_target(Name="Send_To_Slack",Description='Send Messages to ChatApplication via AWS ChatBot',Id='SendToSlack')
               except Exception as e:
                 responseData['Data'] = str(e)
-                responceStatus = cfnresponse.FAILED
+                responseStatus = cfnresponse.FAILED
 
             if event['RequestType'] == 'Delete':
               try:
@@ -113,9 +113,9 @@ Resources:
                 responseData['Data'] = str(rnfe)
               except Exception as e:
                 responseData['Data'] = str(e)
-                responceStatus = cfnresponse.FAILED
+                responseStatus = cfnresponse.FAILED
 
-            cfnresponse.send(event, context, responceStatus, responseData, "CustomResourcePhysicalID") 
+            cfnresponse.send(event, context, responseStatus, responseData, "CustomResourcePhysicalID")
 
       MemorySize: 128
       Timeout: 10
