@@ -98,11 +98,11 @@ Resources:
   #======================================================
   # Custom Resource to Invoke the Lambda Function
   #======================================================     
-  AddCustomActionSHResource1:
-    Type: Custom::AddCustomActionSH
-    DependsOn: LambdaCreateCustomAction
-    Properties:
-      ServiceToken: !GetAtt LambdaCreateCustomAction.Arn
+  #AddCustomActionSHResource1:
+  #  Type: Custom::AddCustomActionSH
+  #  DependsOn: LambdaCreateCustomAction
+  #  Properties:
+  #    ServiceToken: !GetAtt LambdaCreateCustomAction.Arn
   #======================================================
   # SNS Topic
   #======================================================         
