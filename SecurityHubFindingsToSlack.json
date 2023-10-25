@@ -205,7 +205,7 @@
             "webHookUrl" : { "Ref": "IncomingWebHookURL" }
             }
         },
-        "Runtime": "nodejs12.x",
+        "Runtime": "nodejs16.x",
         "MemorySize" : 128,
                 "Timeout": 10,
         "Description" : "Lambda to push SecurityHub findings to Slack",
